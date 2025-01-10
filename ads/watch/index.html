@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Simulator</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600;700&display=swap">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css">
+    <style>
+        body {
+            font-family: 'Open Sans', sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+       .container {
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 20px;
+            background-color: #f9f9f9;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+       .request-log {
+            padding: 20px;
+            background-color: #f0f0f0;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            overflow-y: auto;
+            max-height: 300px;
+        }
+
+        iframe {
+            width: 100%;
+            height: 400px;
+            border: none;
+            margin-bottom: 20px;
+            border-radius: 10px;
+        }
+
+       .progress-bar {
+            width: 100%;
+            height: 10px;
+            background-color: #ddd;
+            border-radius: 10px;
+        }
+
+       .progress-bar-fill {
+            width: 0%;
+            height: 100%;
+            background-color: #4CAF50;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Simulator</h1>
+        <button id="start-button" class="btn btn-primary">Start</button>
+        <div id="iframe-container">
+            <iframe id="iframe-1" src="" frameborder="0"></iframe>
+            <iframe id="iframe-2" src="" frameborder="0"></iframe>
+            <iframe id="iframe-3" src="" frameborder="0"></iframe>
+            <iframe id="iframe-4" src="" frameborder="0"></iframe>
+        </div>
+        <h2>Request Log</h2>
+        <div id="request-log" class="request-log"></div>
+        <div class="progress-bar">
+            <div id="progress-bar-fill" class="progress-bar-fill"></div>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        const startButton = document.getElementById('start-button');
+        const iframe1 = document.getElementById('iframe-1');
+        const iframe2 = document.getElementById('iframe-2');
+        const iframe3 = document.getElementById('iframe-3');
+        const iframe4 = document.getElementById('iframe-4');
+        const requestLog = document.getElementById('request-log');
+        const progressBarFill = document.getElementById('progress-bar-fill');
+        let count = 0;
+        let progress = 0;
+
+        startButton.addEventListener('click', () => {
+            startSimulation();
+        });
+
+        function startSimulation() {
+            const agents = [
+                'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:133.0) Gecko/20100101 Firefox/133.0',
+                'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.169 Safari/537.3',
+                'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/78.0.3904.108 Safari/537.36',
+            ];
+
+            const urls = [
+                'https://track.acqvoluum.com/9486887d-1524-4008-86e3-727f500c0e83?zoneid=103738&browser=Firefox&bannerid=3189275&os=Windows&country=Bangladesh&region=&isp=Sync Online&useragent=Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:133.0) Gecko/20100101 Firefox/133.0&language=11&placement=14892299&subid=4949807b9d322ce891f109072b25c699',
+                'https://turkstench.com/bibpdj8w?key=c6c09c8a26fc2467a013769d3c01c96c',
+                'https://bajibdt.online/bj/adt10krldbnsbdpop?click=w2hmn8stoq0dghu6jgv0anuu',
+                'https://turkstench.com/api/users?in=false&token=L2JpYnBkajh3P2tleT1jNmMwOWM4YTI2ZmMyNDY3YTAxMzc2OWQzYzAxYzk2YyZwc3Q9MTczNjUyNjk3MSZybXRjPXQmc2h1PTk2ZmZkY2ZlZTk1ODk0ZTM1NDgwMmMxN2Y1NjE0MjU0MDc4YWI2YWFiYTQ4NmEwMTc1YTI5NTQ3MWNhYTA4MDkxMjU0YjIzZDk3NGM5OTQyNmQ3MjM4ODA1ZmU1MDEzNTliNzhkMTY0ZTZkODdmMTJlYTFlZmQ3NmNmMjI5NmJiZmVlYjJiNGVhNzhlNDA3ZWRlZWJkM2JhODVjZWZiOGM4NjEwNDIxY2Q2ZmI2YmY1ZjFhZQ&uuid=&pii=',
+            ];
+
+            setInterval(() => {
+                const randomAgent = agents[Math.floor(Math.random() * agents.length)];
+                const randomUrl = urls[Math.floor(Math.random() * urls.length)];
+
+                iframe1.src = randomUrl;
+                iframe2.src = randomUrl;
+                iframe3.src = randomUrl;
+                iframe4.src = randomUrl;
+
+                const log = `Loaded ${count} times: ${randomUrl}`;
+                requestLog.innerHTML += `<p>${log}</p>`;
+                requestLog.scrollTop = requestLog.scrollHeight;
+
+                count++;
+                progress = Math.min(progress + 10, 100);
+                progressBarFill.style.width = `${progress}%`;
+                console.log(log);
+            }, 500); // Load every 0.5 seconds
+        }
+    </script>
+</body>
+</html>
