@@ -193,7 +193,8 @@
                             'User-Agent': randomAgent,
                             'Referer': randomReferer
                         },
-                        redirect: 'follow'
+                        redirect: 'follow',
+                        mode: 'cors'  // Ensure CORS is handled
                     });
                     const endTime = performance.now();
                     const responseTime = endTime - startTime;
