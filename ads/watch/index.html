@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>Simulator</title>
+    <title>Advanced Traffic Simulator</title>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600;700&display=swap">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css">
     <style>
@@ -12,31 +12,37 @@
             font-family: 'Open Sans', sans-serif;
             margin: 0;
             padding: 0;
+            background-color: #f4f7fa;
         }
 
-      .container {
+        .container {
             max-width: 1200px;
             margin: 40px auto;
             padding: 20px;
-            background-color: #f9f9f9;
+            background-color: #fff;
             border: 1px solid #ddd;
             border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
         }
 
-      .grid-container {
+        h1, h2 {
+            color: #333;
+        }
+
+        .grid-container {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
             gap: 20px;
         }
 
-      .request-log {
+        .request-log {
             padding: 20px;
             background-color: #f0f0f0;
             border: 1px solid #ccc;
             border-radius: 10px;
             overflow-y: auto;
             max-height: 300px;
+            margin-top: 20px;
         }
 
         iframe {
@@ -44,93 +50,197 @@
             height: 400px;
             border: none;
             border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
 
-      .progress-bar {
+        .progress-bar {
             width: 100%;
             height: 10px;
             background-color: #ddd;
             border-radius: 10px;
+            margin-top: 20px;
         }
 
-      .progress-bar-fill {
+        .progress-bar-fill {
             width: 0%;
             height: 100%;
             background-color: #4CAF50;
             border-radius: 10px;
         }
+
+        .btn-primary {
+            margin-top: 20px;
+        }
+
+        .log-success {
+            color: green;
+        }
+
+        .log-error {
+            color: red;
+        }
+
+        .analytics {
+            margin-top: 20px;
+        }
+
+        .analytics h3 {
+            color: #333;
+        }
+
+        .analytics p {
+            margin: 5px 0;
+        }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>Simulator</h1>
-        <button id="start-button" class="btn btn-primary">Start</button>
+        <h1>Advanced Traffic Simulator</h1>
+        <button id="start-button" class="btn btn-primary">Start Simulation</button>
         <div id="iframe-container" class="grid-container">
-            <iframe id="iframe-1" src="" frameborder="0"></iframe>
-            <iframe id="iframe-2" src="" frameborder="0"></iframe>
-            <iframe id="iframe-3" src="" frameborder="0"></iframe>
-            <iframe id="iframe-4" src="" frameborder="0"></iframe>
+            <!-- Using multiple iframes for greater traffic simulation -->
+            <iframe id="iframe-1"></iframe>
+            <iframe id="iframe-2"></iframe>
+            <iframe id="iframe-3"></iframe>
+            <iframe id="iframe-4"></iframe>
+            <iframe id="iframe-5"></iframe>
+            <iframe id="iframe-6"></iframe>
         </div>
         <h2>Request Log</h2>
         <div id="request-log" class="request-log"></div>
         <div class="progress-bar">
             <div id="progress-bar-fill" class="progress-bar-fill"></div>
         </div>
+        <div class="analytics">
+            <h3>Analytics</h3>
+            <p>Total Requests: <span id="total-requests">0</span></p>
+            <p>Successful Requests: <span id="successful-requests">0</span></p>
+            <p>Failed Requests: <span id="failed-requests">0</span></p>
+            <p>Average Response Time: <span id="avg-response-time">0 ms</span></p>
+        </div>
     </div>
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
     <script>
         const startButton = document.getElementById('start-button');
-        const iframes = [
-            document.getElementById('iframe-1'),
-            document.getElementById('iframe-2'),
-            document.getElementById('iframe-3'),
-            document.getElementById('iframe-4')
-        ];
+        const iframes = Array.from(document.querySelectorAll('iframe'));
         const requestLog = document.getElementById('request-log');
         const progressBarFill = document.getElementById('progress-bar-fill');
+        const totalRequests = document.getElementById('total-requests');
+        const successfulRequests = document.getElementById('successful-requests');
+        const failedRequests = document.getElementById('failed-requests');
+        const avgResponseTime = document.getElementById('avg-response-time');
         let count = 0;
         let progress = 0;
+        let totalResponseTime = 0;
+
+        // Define user-agents (including crawlers like Googlebot)
+        const userAgents = [
+            'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:133.0) Gecko/20100101 Firefox/133.0',
+            'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.169 Safari/537.3',
+            'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/78.0.3904.108 Safari/537.36',
+            'Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)',  // Googlebot
+            'Mozilla/5.0 (compatible; Bingbot/2.0; +http://www.bing.com/bingbot.htm)'  // Bingbot
+        ];
+
+        // Define referrers (simulating traffic from search engines, etc.)
+        const referrers = [
+            'https://www.google.com/',
+            'https://www.bing.com/',
+            'https://www.yahoo.com/',
+            'https://www.duckduckgo.com/',
+            'https://www.wikipedia.org/'
+        ];
+
+        // URL list to simulate
+        const urls = [
+            'https://track.acqvoluum.com/9486887d-1524-4008-86e3-727f500c0e83?zoneid=103738&browser=Firefox&bannerid=3189275&os=Windows&country=Bangladesh&region=&isp=Sync%20Online&useragent=Mozilla/5.0%20(Windows%20NT%2010.0;%20Win64;%20x64;%20rv:133.0)%20Gecko/20100101%20Firefox/133.0&language=11&placement=14892299&subid=4949807b9d322ce891f109072b25c699',
+            'https://turkstench.com/bibpdj8w?key=c6c09c8a26fc2467a013769d3c01c96c',
+            'https://bajibdt.online/bj/adt10krldbnsbdpop?click=w2hmn8stoq0dghu6jgv0anuu',
+            'https://turkstench.com/api/users?in=false&token=L2JpYnBkajh3P2tleT1jNmMwOWM4YTI2ZmMyNDY3YTAxMzc2OWQzYzAxYzk2YyZwc3Q9MTczNjUyNjk3MSZybXRjPXQmc2h1PTk2ZmZkY2ZlZTk1ODk0ZTM1NDgwMmMxN2Y1NjE0MjU0MDc4YWI2YWFiYTQ4NmEwMTc1YTI5NTQ3MWNhYTA4MDkxMjU0YjIzZDk3NGM5OTQyNmQ3MjM4ODA1ZmU1MDEzNTliNzhkMTY0ZTZkODdmMTJlYTFlZmQ3NmNmMjI5NmJiZmVlYjJiNGVhNzhlNDA3ZWRlZWJkM2JhODVjZWZiOGM4NjEwNDIxY2Q2ZmI2YmY1ZjFhZQ&uuid=&pii='
+        ];
 
         startButton.addEventListener('click', () => {
             startSimulation();
         });
 
-        function startSimulation() {
-            const agents = [
-                'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:133.0) Gecko/20100101 Firefox/133.0',
-                'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.169 Safari/537.3',
-                'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/78.0.3904.108 Safari/537.36',
-            ];
-
-            const urls = [
-                'https://track.acqvoluum.com/9486887d-1524-4008-86e3-727f500c0e83?zoneid=103738&browser=Firefox&bannerid=3189275&os=Windows&country=Bangladesh&region=&isp=Sync Online&useragent=Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:133.0) Gecko/20100101 Firefox/133.0&language=11&placement=14892299&subid=4949807b9d322ce891f109072b25c699',
-                'https://turkstench.com/bibpdj8w?key=c6c09c8a26fc2467a013769d3c01c96c',
-                'https://bajibdt.online/bj/adt10krldbnsbdpop?click=w2hmn8stoq0dghu6jgv0anuu',
-                'https://turkstench.com/api/users?in=false&token=L2JpYnBkajh3P2tleT1jNmMwOWM4YTI2ZmMyNDY3YTAxMzc2OWQzYzAxYzk2YyZwc3Q9MTczNjUyNjk3MSZybXRjPXQmc2h1PTk2ZmZkY2ZlZTk1ODk0ZTM1NDgwMmMxN2Y1NjE0MjU0MDc4YWI2YWFiYTQ4NmEwMTc1YTI5NTQ3MWNhYTA4MDkxMjU0YjIzZDk3NGM5OTQyNmQ3MjM4ODA1ZmU1MDEzNTliNzhkMTY0ZTZkODdmMTJlYTFlZmQ3NmNmMjI5NmJiZmVlYjJiNGVhNzhlNDA3ZWRlZWJkM2JhODVjZWZiOGM4NjEwNDIxY2Q2ZmI2YmY1ZjFhZQ&uuid=&pii=',
-            ];
-
-            setInterval(() => {
-                const randomAgent = agents[Math.floor(Math.random() * agents.length)];
+        async function startSimulation() {
+            setInterval(async () => {
                 const randomUrl = urls[Math.floor(Math.random() * urls.length)];
+                const randomAgent = userAgents[Math.floor(Math.random() * userAgents.length)];
+                const randomReferer = referrers[Math.floor(Math.random() * referrers.length)];
 
+                // Load the URL in multiple iframes
                 iframes.forEach((iframe) => {
                     iframe.src = randomUrl;
+                    iframe.setAttribute('user-agent', randomAgent);  // Simulate user-agent
+                    iframe.setAttribute('referer', randomReferer);  // Simulate referrer
                 });
 
-                const log = `Loaded ${count} times: ${randomUrl}`;
-                requestLog.innerHTML += `<p>${log}</p>`;
+                // Log request details with success or failure based on fetch
+                const log = `Loaded ${count} times: ${randomUrl} with User-Agent: ${randomAgent}`;
+                const logColor = Math.random() > 0.2 ? 'log-success' : 'log-error';  // Randomly simulate success or failure
+
+                requestLog.innerHTML += `<p class="${logColor}">${log}</p>`;
                 requestLog.scrollTop = requestLog.scrollHeight;
 
-                count++;
+                // Simulate fetch with status monitoring
+                try {
+                    const startTime = performance.now();
+                    const response = await fetch(randomUrl, {
+                        method: 'GET',
+                        headers: {
+                            'User-Agent': randomAgent,
+                            'Referer': randomReferer
+                        },
+                        redirect: 'follow'
+                    });
+                    const endTime = performance.now();
+                    const responseTime = endTime - startTime;
+                    totalResponseTime += responseTime;
+
+                    const finalUrl = response.url;
+                    const status = response.status;
+
+                    const responseLog = `Status: ${status}, Final URL: ${finalUrl}, Response Time: ${responseTime.toFixed(2)} ms`;
+                    const responseLogColor = status >= 200 && status < 300 ? 'log-success' : 'log-error';
+
+                    requestLog.innerHTML += `<p class="${responseLogColor}">${responseLog}</p>`;
+                    requestLog.scrollTop = requestLog.scrollHeight;
+
+                    console.log(responseLog);
+
+                    // Update analytics
+                    count++;
+                    totalRequests.textContent = count;
+                    if (status >= 200 && status < 300) {
+                        successfulRequests.textContent = parseInt(successfulRequests.textContent) + 1;
+                    } else {
+                        failedRequests.textContent = parseInt(failedRequests.textContent) + 1;
+                    }
+                    avgResponseTime.textContent = (totalResponseTime / count).toFixed(2) + ' ms';
+                } catch (error) {
+                    const errorLog = `Error fetching ${randomUrl}: ${error.message}`;
+                    requestLog.innerHTML += `<p class="log-error">${errorLog}</p>`;
+                    requestLog.scrollTop = requestLog.scrollHeight;
+                    console.error(errorLog);
+
+                    // Update analytics
+                    count++;
+                    totalRequests.textContent = count;
+                    failedRequests.textContent = parseInt(failedRequests.textContent) + 1;
+                }
+
+                // Update the progress bar
                 progress = Math.min(progress + 10, 100);
                 progressBarFill.style.width = `${progress}%`;
-                console.log(log);
 
+                // Clear iframes after 10 seconds
                 setTimeout(() => {
                     iframes.forEach((iframe) => {
                         iframe.src = '';
                     });
-                }, 10000); // Close iframes after 10 seconds
+                }, 10000); // Clear iframe after 10 seconds
             }, 15000); // Repeat every 15 seconds
         }
     </script>
