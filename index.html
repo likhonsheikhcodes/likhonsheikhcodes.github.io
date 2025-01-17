@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Likhon Sheikh - GitHub Projects</title>
+  <link rel="icon" href="https://avatars.githubusercontent.com/u/106346107?v=4" type="image/png">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      background-color: #f8f9fa;
+      margin: 0;
+      padding: 0;
+    }
+
+    .profile-container {
+      text-align: center;
+      padding: 40px 20px;
+      background-color: #fff;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .profile-container img {
+      border-radius: 50%;
+      width: 120px;
+      height: 120px;
+      object-fit: cover;
+      margin-bottom: 20px;
+    }
+
+    .profile-container h1 {
+      font-size: 24px;
+      font-weight: bold;
+      margin-bottom: 10px;
+    }
+
+    .profile-container p {
+      color: #6c757d;
+      font-size: 16px;
+      margin-bottom: 10px;
+    }
+
+    .profile-links a {
+      margin: 0 10px;
+      font-size: 18px;
+      color: #495057;
+      text-decoration: none;
+      transition: color 0.3s ease;
+    }
+
+    .profile-links a:hover {
+      color: #007bff;
+    }
+
+    .projects-container {
+      padding: 40px 20px;
+    }
+
+    .projects-container h2 {
+      text-align: center;
+      margin-bottom: 20px;
+      font-size: 22px;
+      font-weight: bold;
+    }
+
+    .project-card {
+      background-color: #fff;
+      border-radius: 8px;
+      padding: 20px;
+      margin: 15px 0;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .project-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 6px 10px rgba(0, 0, 0, 0.2);
+    }
+
+    .project-card a {
+      text-decoration: none;
+      font-size: 18px;
+      font-weight: bold;
+      color: #007bff;
+    }
+
+    .project-card p {
+      font-size: 14px;
+      color: #6c757d;
+      margin-top: 10px;
+    }
+  </style>
+</head>
+
+<body>
+  <header class="profile-container">
+    <img src="https://avatars.githubusercontent.com/u/106346107?v=4" alt="Likhon Sheikh Profile Picture">
+    <h1>Likhon Sheikh</h1>
+    <p>Full-stack developer @likhon-dev skilled in React, Redux, Node, Sails, HTML5, CSS3, and JavaScript, building modern, scalable web applications.</p>
+    <div class="profile-links">
+      <a href="mailto:likhonsheikhcodes@gmail.com"><i class="fas fa-envelope"></i></a>
+      <a href="https://likhonsheikh.com" target="_blank"><i class="fas fa-link"></i></a>
+      <a href="https://linkedin.com/in/likhonsheikhcodes" target="_blank"><i class="fab fa-linkedin"></i></a>
+      <a href="https://github.com/likhonsheikhcodes" target="_blank"><i class="fab fa-github"></i></a>
+      <a href="https://mastodon.social/@likhonsheikhcodes" target="_blank"><i class="fab fa-mastodon"></i></a>
+    </div>
+    <p><strong>23 followers · 41 following</strong></p>
+  </header>
+
+  <main class="projects-container">
+    <h2>My GitHub Projects</h2>
+    <div id="projects"></div>
+  </main>
+
+  <footer class="text-center p-3">
+    <p>&copy; 2025 Likhon Sheikh · <a href="https://github.com/likhonsheikhcodes" target="_blank">GitHub Profile</a></p>
+  </footer>
+
+  <script>
+    async function fetchGitHubRepos() {
+      const response = await fetch("https://api.github.com/users/likhonsheikhcodes/repos");
+      const repos = await response.json();
+
+      const projectsContainer = document.getElementById("projects");
+      if (repos && repos.length > 0) {
+        repos.forEach(repo => {
+          const projectCard = document.createElement("div");
+          projectCard.className = "project-card";
+
+          projectCard.innerHTML = `
+            <a href="${repo.html_url}" target="_blank">${repo.name}</a>
+            <p>${repo.description || "No description available."}</p>
+          `;
+          projectsContainer.appendChild(projectCard);
+        });
+      } else {
+        projectsContainer.innerHTML = `<p>No repositories found.</p>`;
+      }
+    }
+
+    fetchGitHubRepos();
+  </script>
+</body>
+
+</html>
