@@ -1,148 +1,350 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Likhon Sheikh - GitHub Projects</title>
-  <link rel="icon" href="https://avatars.githubusercontent.com/u/106346107?v=4" type="image/png">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">
-  <style>
-    body {
-      font-family: 'Arial', sans-serif;
-      background-color: #f8f9fa;
-      margin: 0;
-      padding: 0;
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Likhon Sheikh - Full Stack Developer</title>
+    <link rel="icon" href="https://avatars.githubusercontent.com/u/106346107?v=4" type="image/png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">
+    <style>
+        :root {
+            --primary-color: #2563eb;
+            --secondary-color: #1e40af;
+            --text-primary: #1f2937;
+            --text-secondary: #4b5563;
+            --bg-primary: #ffffff;
+            --bg-secondary: #f3f4f6;
+        }
 
-    .profile-container {
-      text-align: center;
-      padding: 40px 20px;
-      background-color: #fff;
-      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    }
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-secondary);
+            color: var(--text-primary);
+            line-height: 1.6;
+        }
 
-    .profile-container img {
-      border-radius: 50%;
-      width: 120px;
-      height: 120px;
-      object-fit: cover;
-      margin-bottom: 20px;
-    }
+        .navbar {
+            background-color: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
 
-    .profile-container h1 {
-      font-size: 24px;
-      font-weight: bold;
-      margin-bottom: 10px;
-    }
+        .profile-section {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            padding: 6rem 0;
+            position: relative;
+            overflow: hidden;
+        }
 
-    .profile-container p {
-      color: #6c757d;
-      font-size: 16px;
-      margin-bottom: 10px;
-    }
+        .profile-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><rect fill="rgba(255,255,255,0.1)" x="0" y="0" width="100" height="100"/></svg>');
+            opacity: 0.1;
+        }
 
-    .profile-links a {
-      margin: 0 10px;
-      font-size: 18px;
-      color: #495057;
-      text-decoration: none;
-      transition: color 0.3s ease;
-    }
+        .profile-image {
+            width: 180px;
+            height: 180px;
+            border-radius: 50%;
+            border: 4px solid white;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
 
-    .profile-links a:hover {
-      color: #007bff;
-    }
+        .profile-image:hover {
+            transform: scale(1.05);
+        }
 
-    .projects-container {
-      padding: 40px 20px;
-    }
+        .social-links {
+            margin-top: 2rem;
+        }
 
-    .projects-container h2 {
-      text-align: center;
-      margin-bottom: 20px;
-      font-size: 22px;
-      font-weight: bold;
-    }
+        .social-links a {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: rgba(255, 255, 255, 0.2);
+            color: white;
+            margin: 0 0.5rem;
+            transition: all 0.3s ease;
+        }
 
-    .project-card {
-      background-color: #fff;
-      border-radius: 8px;
-      padding: 20px;
-      margin: 15px 0;
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
-    }
+        .social-links a:hover {
+            background-color: white;
+            color: var(--primary-color);
+            transform: translateY(-3px);
+        }
 
-    .project-card:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 6px 10px rgba(0, 0, 0, 0.2);
-    }
+        .stats {
+            background-color: rgba(255, 255, 255, 0.1);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            display: inline-block;
+            backdrop-filter: blur(5px);
+        }
 
-    .project-card a {
-      text-decoration: none;
-      font-size: 18px;
-      font-weight: bold;
-      color: #007bff;
-    }
+        .projects-section {
+            padding: 4rem 0;
+        }
 
-    .project-card p {
-      font-size: 14px;
-      color: #6c757d;
-      margin-top: 10px;
-    }
-  </style>
+        .project-card {
+            background-color: var(--bg-primary);
+            border-radius: 1rem;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(0, 0, 0, 0.1);
+        }
+
+        .project-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .project-title {
+            color: var(--primary-color);
+            font-weight: 600;
+            font-size: 1.25rem;
+            margin-bottom: 0.5rem;
+            display: block;
+        }
+
+        .project-description {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+        }
+
+        .project-stats {
+            margin-top: 1rem;
+            display: flex;
+            gap: 1rem;
+            font-size: 0.875rem;
+        }
+
+        .project-stat {
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+            color: var(--text-secondary);
+        }
+
+        .skills-section {
+            padding: 2rem 0;
+            background-color: var(--bg-primary);
+        }
+
+        .skill-tag {
+            background-color: var(--bg-secondary);
+            color: var(--text-primary);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            display: inline-block;
+            margin: 0.25rem;
+            font-size: 0.875rem;
+            transition: all 0.3s ease;
+        }
+
+        .skill-tag:hover {
+            background-color: var(--primary-color);
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        footer {
+            background-color: var(--text-primary);
+            color: white;
+            padding: 2rem 0;
+            margin-top: 4rem;
+        }
+
+        .loading-spinner {
+            width: 50px;
+            height: 50px;
+            border: 3px solid var(--bg-secondary);
+            border-radius: 50%;
+            border-top-color: var(--primary-color);
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .section-title {
+            position: relative;
+            display: inline-block;
+            margin-bottom: 2rem;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 0;
+            width: 60px;
+            height: 4px;
+            background-color: var(--primary-color);
+            border-radius: 2px;
+        }
+    </style>
 </head>
-
 <body>
-  <header class="profile-container">
-    <img src="https://avatars.githubusercontent.com/u/106346107?v=4" alt="Likhon Sheikh Profile Picture">
-    <h1>Likhon Sheikh</h1>
-    <p>Full-stack developer @likhon-dev skilled in React, Redux, Node, Sails, HTML5, CSS3, and JavaScript, building modern, scalable web applications.</p>
-    <div class="profile-links">
-      <a href="mailto:likhonsheikhcodes@gmail.com"><i class="fas fa-envelope"></i></a>
-      <a href="https://likhonsheikh.com" target="_blank"><i class="fas fa-link"></i></a>
-      <a href="https://linkedin.com/in/likhonsheikhcodes" target="_blank"><i class="fab fa-linkedin"></i></a>
-      <a href="https://github.com/likhonsheikhcodes" target="_blank"><i class="fab fa-github"></i></a>
-      <a href="https://mastodon.social/@likhonsheikhcodes" target="_blank"><i class="fab fa-mastodon"></i></a>
-    </div>
-    <p><strong>23 followers · 41 following</strong></p>
-  </header>
+    <nav class="navbar navbar-expand-lg navbar-light">
+        <div class="container">
+            <a class="navbar-brand fw-bold" href="#">LS</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#about">About</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#projects">Projects</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#skills">Skills</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#contact">Contact</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
 
-  <main class="projects-container">
-    <h2>My GitHub Projects</h2>
-    <div id="projects"></div>
-  </main>
+    <section class="profile-section text-center" id="about">
+        <div class="container">
+            <img src="https://avatars.githubusercontent.com/u/106346107?v=4" alt="Likhon Sheikh" class="profile-image mb-4">
+            <h1 class="display-4 fw-bold mb-3">Likhon Sheikh</h1>
+            <p class="lead mb-4">Full-stack developer crafting modern, scalable web applications</p>
+            <div class="stats mb-4">
+                <span class="me-3"><i class="fas fa-users me-2"></i>23 followers</span>
+                <span><i class="fas fa-user-plus me-2"></i>41 following</span>
+            </div>
+            <div class="social-links">
+                <a href="mailto:likhonsheikhcodes@gmail.com"><i class="fas fa-envelope"></i></a>
+                <a href="https://likhonsheikh.com" target="_blank"><i class="fas fa-link"></i></a>
+                <a href="https://linkedin.com/in/likhonsheikhcodes" target="_blank"><i class="fab fa-linkedin"></i></a>
+                <a href="https://github.com/likhonsheikhcodes" target="_blank"><i class="fab fa-github"></i></a>
+                <a href="https://mastodon.social/@likhonsheikhcodes" target="_blank"><i class="fab fa-mastodon"></i></a>
+            </div>
+        </div>
+    </section>
 
-  <footer class="text-center p-3">
-    <p>&copy; 2025 Likhon Sheikh · <a href="https://github.com/likhonsheikhcodes" target="_blank">GitHub Profile</a></p>
-  </footer>
+    <section class="skills-section py-5" id="skills">
+        <div class="container">
+            <h2 class="section-title">Skills & Technologies</h2>
+            <div class="skill-tags">
+                <span class="skill-tag">React</span>
+                <span class="skill-tag">Redux</span>
+                <span class="skill-tag">Node.js</span>
+                <span class="skill-tag">Sails.js</span>
+                <span class="skill-tag">HTML5</span>
+                <span class="skill-tag">CSS3</span>
+                <span class="skill-tag">JavaScript</span>
+                <span class="skill-tag">TypeScript</span>
+                <span class="skill-tag">Git</span>
+                <span class="skill-tag">RESTful APIs</span>
+                <span class="skill-tag">MongoDB</span>
+                <span class="skill-tag">SQL</span>
+            </div>
+        </div>
+    </section>
 
-  <script>
-    async function fetchGitHubRepos() {
-      const response = await fetch("https://api.github.com/users/likhonsheikhcodes/repos");
-      const repos = await response.json();
+    <section class="projects-section" id="projects">
+        <div class="container">
+            <h2 class="section-title">Featured Projects</h2>
+            <div id="projects-container" class="row">
+                <div class="col-12 text-center py-5">
+                    <div class="loading-spinner mx-auto"></div>
+                </div>
+            </div>
+        </div>
+    </section>
 
-      const projectsContainer = document.getElementById("projects");
-      if (repos && repos.length > 0) {
-        repos.forEach(repo => {
-          const projectCard = document.createElement("div");
-          projectCard.className = "project-card";
+    <footer id="contact">
+        <div class="container text-center">
+            <h3 class="mb-4">Get in Touch</h3>
+            <div class="social-links mb-4">
+                <a href="mailto:likhonsheikhcodes@gmail.com"><i class="fas fa-envelope"></i></a>
+                <a href="https://linkedin.com/in/likhonsheikhcodes" target="_blank"><i class="fab fa-linkedin"></i></a>
+                <a href="https://github.com/likhonsheikhcodes" target="_blank"><i class="fab fa-github"></i></a>
+            </div>
+            <p class="mb-0">&copy; 2025 Likhon Sheikh · All rights reserved</p>
+        </div>
+    </footer>
 
-          projectCard.innerHTML = `
-            <a href="${repo.html_url}" target="_blank">${repo.name}</a>
-            <p>${repo.description || "No description available."}</p>
-          `;
-          projectsContainer.appendChild(projectCard);
-        });
-      } else {
-        projectsContainer.innerHTML = `<p>No repositories found.</p>`;
-      }
-    }
+    <script>
+        async function fetchGitHubRepos() {
+            try {
+                const response = await fetch('https://api.github.com/users/likhonsheikhcodes/repos');
+                const repos = await response.json();
+                const projectsContainer = document.getElementById('projects-container');
+                
+                if (repos && repos.length > 0) {
+                    projectsContainer.innerHTML = repos.map(repo => `
+                        <div class="col-md-6 col-lg-4">
+                            <div class="project-card">
+                                <a href="${repo.html_url}" class="project-title" target="_blank">
+                                    ${repo.name}
+                                </a>
+                                <p class="project-description">
+                                    ${repo.description || 'No description available.'}
+                                </p>
+                                <div class="project-stats">
+                                    <span class="project-stat">
+                                        <i class="fas fa-star"></i>
+                                        ${repo.stargazers_count}
+                                    </span>
+                                    <span class="project-stat">
+                                        <i class="fas fa-code-branch"></i>
+                                        ${repo.forks_count}
+                                    </span>
+                                    ${repo.language ? `
+                                        <span class="project-stat">
+                                            <i class="fas fa-code"></i>
+                                            ${repo.language}
+                                        </span>
+                                    ` : ''}
+                                </div>
+                            </div>
+                        </div>
+                    `).join('');
+                } else {
+                    projectsContainer.innerHTML = `
+                        <div class="col-12">
+                            <p class="text-center">No repositories found.</p>
+                        </div>
+                    `;
+                }
+            } catch (error) {
+                console.error('Error fetching repositories:', error);
+                document.getElementById('projects-container').innerHTML = `
+                    <div class="col-12">
+                        <p class="text-center text-danger">Error loading repositories. Please try again later.</p>
+                    </div>
+                `;
+            }
+        }
 
-    fetchGitHubRepos();
-  </script>
+        document.addEventListener('DOMContentLoaded', fetchGitHubRepos);
+    </script>
 </body>
-
 </html>
